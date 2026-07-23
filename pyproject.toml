@@ -1,0 +1,19 @@
+[project]
+name = "adni-phenotyping-depth-progression"
+version = "1.0.0"
+description = "Reproducible analysis of phenotyping depth for 24-month MCI-to-dementia progression"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "joblib==1.5.3",
+    "matplotlib==3.11.1",
+    "numpy==2.5.1",
+    "openpyxl==3.1.5",
+    "pandas==2.3.3",
+    "python-docx==1.2.0",
+    "scikit-learn==1.8.0",
+    "scipy==1.18.0",
+    "seaborn==0.13.2",
+]
+
+[tool.uv]
+package = false

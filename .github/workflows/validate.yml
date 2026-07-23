@@ -1,0 +1,24 @@
+name: Validate repository
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: uv sync --frozen
+      - run: .venv/bin/python -m compileall -q scripts
+      - run: .venv/bin/python scripts/check_inputs.py --manifest-only
+      - name: Reject tracked participant-data files
+        run: |
+          if git ls-files | grep -E '\.(csv|tsv|xls|xlsx|sav|sas7bdat)$'; then
+            echo "Restricted or participant-level data file is tracked."
+            exit 1
+          fi

@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0.0",
+  "adni": {
+    "source_name": "Alzheimer's Disease Neuroimaging Initiative through the LONI Image and Data Archive",
+    "source_url": "https://adni.loni.usc.edu/data-samples/adni-data/",
+    "data_use_agreement_url": "https://adni.loni.usc.edu/wp-content/themes/adni_2023/documents/ADNI_Data_Use_Agreement.pdf",
+    "local_directory": "csvs",
+    "files": [
+      {
+        "filename": "DXSUM.csv",
+        "domain": "Diagnosis",
+        "required_all": ["RID", "EXAMDATE"],
+        "required_any": [["VISCODE2", "VISCODE"], ["DIAGNOSIS", "DX", "DXCHANGE"]]
+      },
+      {
+        "filename": "PTDEMOG.csv",
+        "domain": "Demographics",
+        "required_all": ["RID", "PTGENDER", "PTEDUCAT", "PTDOBYY"],
+        "required_any": []
+      },
+      {
+        "filename": "GDSCALE.csv",
+        "domain": "Basic clinical assessment",
+        "required_all": ["RID", "GDTOTAL"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "MMSE.csv",
+        "domain": "Global cognition",
+        "required_all": ["RID", "MMSCORE"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "MOCA.csv",
+        "domain": "Global cognition",
+        "required_all": ["RID", "MOCA"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "CDR.csv",
+        "domain": "Global staging",
+        "required_all": ["RID", "CDRSB"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "FAQ.csv",
+        "domain": "Function",
+        "required_all": ["RID", "FAQTOTAL"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "ADAS.csv",
+        "domain": "Cognitive battery",
+        "required_all": ["RID", "TOTSCORE", "TOTAL13"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "NEUROBAT.csv",
+        "domain": "Cognitive battery",
+        "required_all": [
+          "RID",
+          "LIMMTOTAL",
+          "LDELTOTAL",
+          "AVTOT1",
+          "AVTOT2",
+          "AVTOT3",
+          "AVTOT4",
+          "AVTOT5",
+          "AVDEL30MIN",
+          "TRABSCOR",
+          "DIGITSCOR",
+          "CATANIMSC",
+          "BNTTOTAL"
+        ],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "UWNPSYCHSUM.csv",
+        "domain": "Composite cognition",
+        "required_all": ["RID", "ADNI_MEM", "ADNI_EF", "ADNI_LAN", "ADNI_VS"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "UCSFFSX7.csv",
+        "domain": "Processed structural MRI",
+        "required_all": [
+          "RID",
+          "ST10CV",
+          "ST29SV",
+          "ST88SV",
+          "ST12SV",
+          "ST71SV",
+          "ST24CV",
+          "ST24TA",
+          "ST83CV",
+          "ST83TA",
+          "ST44CV",
+          "ST44TA",
+          "ST103CV",
+          "ST103TA",
+          "ST32CV",
+          "ST32TA",
+          "ST91CV",
+          "ST91TA",
+          "ST40CV",
+          "ST40TA",
+          "ST99CV",
+          "ST99TA",
+          "ST37SV",
+          "ST96SV",
+          "ST52TA",
+          "ST111TA",
+          "ST154SV"
+        ],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "APOERES.csv",
+        "domain": "APOE",
+        "required_all": ["RID", "GENOTYPE"],
+        "required_any": []
+      },
+      {
+        "filename": "UCBERKELEY_AMY_6MM.csv",
+        "domain": "Processed amyloid PET",
+        "required_all": ["RID", "AMYLOID_STATUS", "CENTILOIDS"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "UGOTPTAU181.csv",
+        "domain": "Plasma biomarker",
+        "required_all": ["RID", "PLASMAPTAU181"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "UPENNBIOMK_MASTER.csv",
+        "domain": "CSF biomarkers",
+        "required_all": ["RID", "ABETA", "TAU", "PTAU"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      },
+      {
+        "filename": "UPENNBIOMK_ROCHE_ELECSYS.csv",
+        "domain": "CSF biomarkers",
+        "required_all": ["RID", "ABETA40", "ABETA42", "TAU", "PTAU"],
+        "required_any": [["VISCODE2", "VISCODE"]]
+      }
+    ]
+  },
+  "oasis2": {
+    "source_name": "Open Access Series of Imaging Studies, OASIS-2, Washington University",
+    "dataset_page": "https://sites.wustl.edu/oasisbrains/home/oasis-2/",
+    "source_url": "https://sites.wustl.edu/oasisbrains/files/2024/03/oasis_longitudinal_demographics-8d83e569fa2e2d30.xlsx",
+    "filename": "oasis_longitudinal_demographics.xlsx",
+    "local_path": "external_data/oasis2/oasis_longitudinal_demographics.xlsx",
+    "downloaded_by_run_all": true
+  }
+}

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, cite the associated manuscript and this repository."
+title: "Phenotyping Depth in MCI Progression"
+type: software
+version: 1.0.0
+date-released: 2026-07-23
+repository-code: "https://github.com/kapoorsuvan-cpu/adni-phenotyping-depth-progression"
+authors:
+  - family-names: Kapoor
+    given-names: Suvan
+  - family-names: Ablakhad
+    given-names: Dominic
+  - family-names: Hanna
+    given-names: Rayan
+  - family-names: Huynh
+    given-names: Kylan
+  - family-names: Quirarte
+    given-names: Eric
+  - family-names: Nocon
+    given-names: Orion
