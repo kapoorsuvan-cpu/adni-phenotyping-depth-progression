@@ -860,21 +860,18 @@ def build_main() -> None:
 
     doc.add_heading("Data and code availability", level=1)
     doc.add_paragraph(
-        "Analysis code is available at https://github.com/kapoorsuvan-cpu/"
-        "adni-phenotyping-depth-progression. Participant-level ADNI data and derived CSV files "
-        "are not included. Approved investigators must obtain the ADNI exports through the "
-        "LONI Image and Data Archive under the ADNI Data Use Agreement. The OASIS-2 subject "
-        "workbook is obtained from Washington University under the OASIS data-use terms."
+        "Code is available at https://github.com/kapoorsuvan-cpu/"
+        "adni-phenotyping-depth-progression. ADNI participant-level and derived CSV data are "
+        "excluded; approved investigators must obtain the exports from LONI IDA under its Data "
+        "Use Agreement. The OASIS-2 workbook is downloaded from Washington University under "
+        "OASIS data-use terms."
     )
     doc.add_paragraph(
-        "To reproduce the study, place DXSUM.csv, PTDEMOG.csv, GDSCALE.csv, MMSE.csv, MOCA.csv, "
-        "CDR.csv, FAQ.csv, ADAS.csv, NEUROBAT.csv, UWNPSYCHSUM.csv, UCSFFSX7.csv, APOERES.csv, "
+        "Place in `csvs/`: DXSUM.csv, PTDEMOG.csv, GDSCALE.csv, "
+        "MMSE.csv, MOCA.csv, CDR.csv, FAQ.csv, ADAS.csv, NEUROBAT.csv, UWNPSYCHSUM.csv, "
+        "UCSFFSX7.csv, APOERES.csv, "
         "UCBERKELEY_AMY_6MM.csv, UGOTPTAU181.csv, UPENNBIOMK_MASTER.csv, and "
-        "UPENNBIOMK_ROCHE_ELECSYS.csv in the repository's `csvs/` directory. From the repository "
-        "root, run `bash run_all.sh`. The entry point validates inputs with "
-        "`scripts/check_inputs.py`, runs `scripts/run_final_analysis.py`, downloads and runs the "
-        "OASIS-2 replication, and rebuilds the manuscript. `DATA_REQUIREMENTS.md` and "
-        "`input_manifest.json` specify each source, filename, and required column."
+        "UPENNBIOMK_ROCHE_ELECSYS.csv. Run `bash run_all.sh` from the repository root."
     )
 
     doc.add_heading("Ethics", level=1)
