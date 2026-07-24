@@ -318,8 +318,8 @@ def add_title_page(doc: Document) -> None:
     authors.alignment = WD_ALIGN_PARAGRAPH.CENTER
     authors.paragraph_format.space_after = Pt(8)
     arun = authors.add_run(
-        "Suvan Kapoor¹; Dominic Ablakhad²; Rayan Hanna²; Kylan Huynh²; "
-        "Eric Quirarte²; Orion Nocon²; for the Alzheimer’s Disease "
+        "Suvan Kapoor; Dominic Ablakhad; Rayan Hanna; Kylan Huynh; "
+        "Eric Quirarte; Orion Nocon; for the Alzheimer’s Disease "
         "Neuroimaging Initiative*"
     )
     arun.bold = True
@@ -329,7 +329,7 @@ def add_title_page(doc: Document) -> None:
     affiliation.alignment = WD_ALIGN_PARAGRAPH.CENTER
     affiliation.add_run("Author affiliations: ").bold = True
     affiliation.add_run(
-        "¹ University of California, Berkeley. ² University of California, San Diego."
+        "University of California, Berkeley; University of California, San Diego."
     )
     corresponding = doc.add_paragraph()
     corresponding.alignment = WD_ALIGN_PARAGRAPH.CENTER
