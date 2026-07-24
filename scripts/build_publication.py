@@ -318,8 +318,8 @@ def add_title_page(doc: Document) -> None:
     authors.alignment = WD_ALIGN_PARAGRAPH.CENTER
     authors.paragraph_format.space_after = Pt(8)
     arun = authors.add_run(
-        "Suvan Kapoor¹; Dominic Ablakhad; Rayan Hanna; Kylan Huynh; "
-        "Eric Quirarte; Orion Nocon; for the Alzheimer’s Disease "
+        "Suvan Kapoor¹; Dominic Ablakhad²; Rayan Hanna²; Kylan Huynh²; "
+        "Eric Quirarte²; Orion Nocon²; for the Alzheimer’s Disease "
         "Neuroimaging Initiative*"
     )
     arun.bold = True
@@ -329,8 +329,7 @@ def add_title_page(doc: Document) -> None:
     affiliation.alignment = WD_ALIGN_PARAGRAPH.CENTER
     affiliation.add_run("Author affiliations: ").bold = True
     affiliation.add_run(
-        "¹ University of California, Berkeley. Affiliations for the remaining authors "
-        "must be confirmed before journal submission."
+        "¹ University of California, Berkeley. ² University of California, San Diego."
     )
     corresponding = doc.add_paragraph()
     corresponding.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -919,7 +918,8 @@ def build_main() -> None:
 
     doc.add_heading("Acknowledgments", level=1)
     doc.add_paragraph(
-        "The authors thank Douglas Galasko, MD, for methodological guidance."
+        "The authors thank Douglas Galasko, MD, University of California, San Diego, "
+        "for methodological guidance."
     )
     doc.add_paragraph(
         "*Data used in preparation of this article were obtained from the Alzheimer’s Disease "
