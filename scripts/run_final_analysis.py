@@ -41,6 +41,17 @@ from sklearn.preprocessing import StandardScaler
 SEED = 42
 HORIZON = 24.0
 C_GRID = [0.003, 0.01, 0.03, 0.1, 0.3, 1.0]
+BURDEN_INCREMENT = {
+    "1 Demographics": 0.5,
+    "2 + Depressive symptoms": 0.5,
+    "3 + MMSE": 1.0,
+    "4 + MoCA": 1.0,
+    "5 + CDR-SB": 1.0,
+    "6 + Broad cognition": 2.0,
+    "7 + MRI": 10.0,
+    "8 + APOE": 0.75,
+    "9 + AD biomarkers": 9.25,
+}
 PROJECT = Path(__file__).resolve().parents[1]
 CSV_DIR = PROJECT / "csvs"
 OUT = PROJECT / "final_report_outputs"
@@ -289,7 +300,7 @@ def feature_sets(df):
               "apoe": apoe, "mri": mri, "biomarkers": bio}
     order = [
         ("1 Demographics", ["demographics"]),
-        ("2 + Basic clinical", ["demographics", "basic_clinical"]),
+        ("2 + Depressive symptoms", ["demographics", "basic_clinical"]),
         ("3 + MMSE", ["demographics", "basic_clinical", "mmse"]),
         ("4 + MoCA", ["demographics", "basic_clinical", "mmse", "moca"]),
         ("5 + CDR-SB", ["demographics", "basic_clinical", "mmse", "moca", "cdr"]),
@@ -690,6 +701,29 @@ def feature_coverage(df, groups):
     return pd.DataFrame(rows)
 
 
+def predictor_dictionary(df, groups):
+    """Generate a feature-level analysis dictionary and availability record."""
+    rows = []
+    for domain, cols in groups.items():
+        for code in cols:
+            if "__" in code:
+                namespace, source_column = code.split("__", 1)
+            else:
+                namespace, source_column = "derived", code
+            available = int(df[code].notna().sum())
+            rows.append({
+                "Feature domain": domain.replace("_", " ").title(),
+                "Reported feature": pretty_feature(code),
+                "Analysis feature code": code,
+                "Source namespace": namespace,
+                "Source column or derived variable": source_column,
+                "Available n": available,
+                "Available %": available / len(df),
+                "Missing %": 1 - available / len(df),
+            })
+    return pd.DataFrame(rows).sort_values(["Feature domain", "Reported feature"])
+
+
 def evaluate_feature_set(df, cols, seed_offset=0):
     y = df.y_convert_2yr.astype(int).to_numpy()
     probability, _ = nested_oof_classification(df, cols)
@@ -791,7 +825,7 @@ def figures(step, pred, reg, panels, y):
     ax.set_title("Stepwise 2-year conversion prediction (* FDR q < 0.05)")
     fig.tight_layout(); fig.savefig(FIGURES / "figure2_stepwise_classification.png"); plt.close(fig)
 
-    burden = [0.5, 1, 2, 3, 4, 6, 16, 16.75, 26]
+    burden = np.cumsum([BURDEN_INCREMENT[label] for label in step.feature_set])
     fig, ax = plt.subplots(figsize=(7.2, 4.8))
     ax.plot(burden, step.roc_auc, marker="o", color=colors[1])
     for x, yy, label in zip(burden, step.roc_auc, step.feature_set):
@@ -831,10 +865,23 @@ def figures(step, pred, reg, panels, y):
     ax.set_xticks(range(1, 6))
     ax.set_ylim(0.77, 0.87)
     ax.legend(frameon=True, fontsize=8)
-    ax.annotate("APOE was not selected;\ncurve equals clinical panel",
-                xy=(5, panels.query("panel_family == 'Clinical'").iloc[-1].roc_auc),
-                xytext=(-145, -28), textcoords="offset points", fontsize=8,
-                arrowprops=dict(arrowstyle="->", color="0.35", lw=.8))
+    clinical_curve = panels.query("panel_family == 'Clinical'").set_index("panel_size")
+    ax.annotate(
+        "APOE was not selected;\ncurves coincide",
+        xy=(4, clinical_curve.loc[4, "roc_auc"]),
+        xytext=(3.15, 0.862),
+        textcoords="data",
+        ha="center",
+        va="top",
+        fontsize=8,
+        bbox=dict(
+            boxstyle="round,pad=0.3",
+            facecolor="white",
+            edgecolor="0.75",
+            alpha=0.95,
+        ),
+        arrowprops=dict(arrowstyle="->", color="0.35", lw=.8),
+    )
     fig.tight_layout()
     fig.savefig(FIGURES / "figure5_minimal_panels.png"); plt.close(fig)
 
@@ -968,6 +1015,7 @@ def main():
     reg, reg_data = regression_results(df, steps, changes)
     t1 = table1(df)
     coverage = feature_coverage(df, groups)
+    dictionary = predictor_dictionary(df, groups)
     full_step = step.iloc[-1]
     sensitivity = pd.DataFrame([
         {"Stable follow-up rule": "24 months (primary)",
@@ -1003,6 +1051,7 @@ def main():
     tables = {
         "table1_baseline_characteristics.csv": t1,
         "table2_feature_coverage.csv": coverage,
+        "table10_predictor_dictionary.csv": dictionary,
         "table3_stepwise_classification.csv": step,
         "table4_continuous_outcomes.csv": reg,
         "table5_minimal_marker_panels.csv": panels,

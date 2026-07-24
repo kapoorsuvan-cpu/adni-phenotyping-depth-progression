@@ -308,7 +308,7 @@ def add_title_page(doc: Document) -> None:
     subtitle.paragraph_format.space_after = Pt(13)
     run = subtitle.add_run(
         "A leakage-resistant ADNI analysis with stepwise multimodal ablation "
-        "and OASIS-2 conceptual replication"
+        "and an exploratory OASIS-2 analysis"
     )
     run.italic = True
     run.font.size = Pt(11)
@@ -318,7 +318,7 @@ def add_title_page(doc: Document) -> None:
     authors.alignment = WD_ALIGN_PARAGRAPH.CENTER
     authors.paragraph_format.space_after = Pt(8)
     arun = authors.add_run(
-        "Suvan Kapoor; Dominic Ablakhad; Rayan Hanna; Kylan Huynh; "
+        "Suvan Kapoor¹; Dominic Ablakhad; Rayan Hanna; Kylan Huynh; "
         "Eric Quirarte; Orion Nocon; for the Alzheimer’s Disease "
         "Neuroimaging Initiative*"
     )
@@ -328,15 +328,21 @@ def add_title_page(doc: Document) -> None:
     affiliation = doc.add_paragraph()
     affiliation.alignment = WD_ALIGN_PARAGRAPH.CENTER
     affiliation.add_run("Author affiliations: ").bold = True
-    affiliation.add_run("to be confirmed before journal submission.")
+    affiliation.add_run(
+        "¹ University of California, Berkeley. Affiliations for the remaining authors "
+        "must be confirmed before journal submission."
+    )
     corresponding = doc.add_paragraph()
     corresponding.alignment = WD_ALIGN_PARAGRAPH.CENTER
     corresponding.add_run("Corresponding author: ").bold = True
-    corresponding.add_run("Suvan Kapoor; postal address and email to be supplied.")
+    corresponding.add_run(
+        "Suvan Kapoor, University of California, Berkeley; "
+        "kapoor_suvan@berkeley.edu."
+    )
 
     add_rule(doc)
     add_label_paragraph(doc, "Word count: ", "approximately 4,600 words, excluding references, tables, and legends.")
-    add_label_paragraph(doc, "Tables and figures: ", "4 main tables, 7 figures, and supplementary tables.")
+    add_label_paragraph(doc, "Tables and figures: ", "4 main tables, 7 figures, and 9 supplementary tables provided separately.")
     add_label_paragraph(doc, "Short title: ", "Phenotyping depth in MCI progression")
     add_label_paragraph(doc, "Keywords: ", "mild cognitive impairment; dementia; ADNI; prediction model; cognition; MRI; APOE; amyloid; p-tau")
     add_label_paragraph(doc, "Reporting framework: ", "TRIPOD+AI; PROBAST+AI principles.")
@@ -456,7 +462,7 @@ def build_main() -> None:
         "of MCI and early AD [3]."
     )
     doc.add_paragraph(
-        "OASIS-2 supplied the external conceptual replication. It contains longitudinal MRI "
+        "OASIS-2 supplied an exploratory secondary-dataset analysis. It contains longitudinal MRI "
         "and clinical data from 150 adults aged 60–96 years [16]. The official Washington "
         "University subject-data workbook was downloaded by the pipeline. A SHA-256 checksum "
         "was recorded. OASIS-2 lacks the ADNI cognitive battery and AD biomarker set, so it "
@@ -492,7 +498,16 @@ def build_main() -> None:
         "and ADNI composite scores [7,8]. The final biomarker layer contained amyloid PET "
         "status and Centiloids, plasma p-tau181, legacy and Roche CSF amyloid and tau assays, "
         "and derived ratios. Plasma p-tau217 had eight usable baseline records and was "
-        "excluded before modeling."
+        "excluded before modeling. Supplementary Table S9 lists every analysis feature, its "
+        "source namespace and column, and its baseline availability."
+    )
+    doc.add_paragraph(
+        "Figure 3 uses an analyst-defined relative testing-burden score, fixed in the "
+        "analysis code before model fitting. Incremental scores were 0.5 for demographics, "
+        "0.5 for depressive symptoms, 1 each for MMSE, MoCA, and CDR-SB, 2 for the broad "
+        "battery, 10 for MRI, 0.75 for APOE, and 9.25 for AD biomarkers. The score is a "
+        "descriptive proxy for assessment burden; it is not a monetary cost or patient-"
+        "preference measure."
     )
 
     doc.add_heading("Model development and validation", level=2)
@@ -513,11 +528,14 @@ def build_main() -> None:
         "slope. Decision curves used risk thresholds from 0.05 to 0.60 [17]."
     )
     doc.add_paragraph(
-        "Compact panels used one stratified 75:25 split fixed by seed 42. Candidate ranking, "
-        "forward selection of up to five markers, threshold selection, and regularization "
-        "tuning occurred within the training partition. The test partition remained untouched "
-        "until the panel was locked. Clinical, clinical-plus-APOE, and multimodal candidate "
-        "pools were compared."
+        "Compact panels used one stratified 75:25 split fixed by seed 42. Within the training "
+        "partition, each candidate was ranked by five-fold cross-validated univariable AUROC; "
+        "the 12 highest-ranked candidates entered greedy forward selection. At each of five "
+        "steps, the feature that maximized five-fold training AUROC was added. No explicit "
+        "correlation filter or stopping rule was applied before the fixed five-marker limit. "
+        "Threshold selection and regularization tuning occurred only in the training partition. "
+        "The test partition remained untouched until the panel was locked. Clinical, clinical-"
+        "plus-APOE, and multimodal candidate pools were compared."
     )
 
     doc.add_heading("Statistical analysis", level=2)
@@ -525,7 +543,9 @@ def build_main() -> None:
         "Continuous baseline characteristics were compared with Welch tests. Binary measures "
         "used Fisher exact tests. Standardized mean differences described magnitude. AUROC "
         "confidence intervals used 3,000 stratified bootstrap samples. Adjacent AUROC changes "
-        "used paired stratified bootstrap samples. Model discrimination against chance used "
+        "used the same participant-level, fixed out-of-fold probabilities for both adjacent "
+        "models and paired stratified bootstrap resampling of participant indices. Model "
+        "discrimination against chance used "
         "the Mann–Whitney relation to AUROC. Continuous outcomes used ridge regression with "
         "five-fold cross-validation. Paired bootstrap samples tested changes in R². The "
         "Benjamini–Hochberg procedure controlled the false discovery rate within each family "
@@ -534,7 +554,7 @@ def build_main() -> None:
         "TRIPOD+AI and incorporates PROBAST+AI principles [18,19]."
     )
 
-    doc.add_heading("External conceptual replication", level=2)
+    doc.add_heading("Exploratory OASIS-2 analysis", level=2)
     doc.add_paragraph(
         "In OASIS-2, the index state was the first CDR 0.5 visit. Progression was CDR ≥1 "
         "within 24 months. Stable participants required 24 months of follow-up. Three "
@@ -644,7 +664,7 @@ def build_main() -> None:
         "for clinical decisions without transport validation."
     )
     add_figure(
-        doc, 6, "figure6_discrimination_calibration_utility.png",
+        doc, 4, "figure6_discrimination_calibration_utility.png",
         "Out-of-fold discrimination, decile calibration, and decision-curve analysis for "
         "the broad-cognition model and the full biomarker model. The dashed diagonal in the "
         "calibration panel denotes agreement. Decision curves compare each model with "
@@ -724,7 +744,7 @@ def build_main() -> None:
         "false-discovery correction."
     )
     add_figure(
-        doc, 4, "figure4_continuous_outcomes.png",
+        doc, 6, "figure4_continuous_outcomes.png",
         "Cross-validated R² for approximately 24-month change in CDR-SB, MMSE, and MoCA. "
         "Step labels match the cumulative phenotyping ladder.",
     )
@@ -741,7 +761,7 @@ def build_main() -> None:
         f"{t9.loc[(t9['Subgroup domain'].eq('Sex')) & (t9['Subgroup'].eq('Female')), 'Heterogeneity FDR q'].iloc[0]:.3f}."
     )
 
-    doc.add_heading("OASIS-2 conceptual replication", level=2)
+    doc.add_heading("Exploratory OASIS-2 analysis", level=2)
     oas_full = t8.iloc[-1]
     doc.add_paragraph(
         f"The OASIS-2 cohort contained {int(oas_full['n'])} eligible participants; "
@@ -756,7 +776,7 @@ def build_main() -> None:
     )
     add_figure(
         doc, 7, "figure7_oasis2_external_replication.png",
-        "Leave-one-subject-out AUROC in the OASIS-2 conceptual replication. Error bars show "
+        "Leave-one-subject-out AUROC in the exploratory OASIS-2 analysis. Error bars show "
         "95% stratified-bootstrap confidence intervals. OASIS-2 used CDR-defined index and "
         "outcome states and a reduced feature space.",
     )
@@ -1023,6 +1043,11 @@ def build_supplement() -> None:
             "Supplementary Table S8. Subgroup performance",
             "table9_subgroup_performance.csv",
             ["Subgroup domain", "Subgroup", "n", "Converters n", "ROC-AUC", "ROC-AUC CI low", "ROC-AUC CI high", "PR-AUC", "Brier score", "Second-minus-first AUC difference", "Difference CI low", "Difference CI high", "Heterogeneity p", "Heterogeneity FDR q"],
+        ),
+        (
+            "Supplementary Table S9. Analysis predictor dictionary and missingness",
+            "table10_predictor_dictionary.csv",
+            ["Feature domain", "Reported feature", "Analysis feature code", "Source namespace", "Source column or derived variable", "Available n", "Available %", "Missing %"],
         ),
     ]
 

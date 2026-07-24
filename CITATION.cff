@@ -8,6 +8,8 @@ repository-code: "https://github.com/kapoorsuvan-cpu/adni-phenotyping-depth-prog
 authors:
   - family-names: Kapoor
     given-names: Suvan
+    affiliation: "University of California, Berkeley"
+    email: "kapoor_suvan@berkeley.edu"
   - family-names: Ablakhad
     given-names: Dominic
   - family-names: Hanna
